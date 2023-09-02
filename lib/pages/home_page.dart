@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sitegastos/pages/total_page.dart';
+import 'package:sitegastos/utils/app_styles.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  TextStyle defaultStyle() => const TextStyle(
-        fontSize: 30,
-        fontWeight: FontWeight.w500,
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +14,8 @@ class HomePage extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50),
           child: Text(
-            'Gerenciamento de Gastos',
-            style: defaultStyle(),
+            'Meus Gastos',
+            style: AppStyles.defaultStyle(),
           ),
         ),
         actions: [
@@ -41,6 +38,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+      body: TotalPage(),
     );
   }
 }
