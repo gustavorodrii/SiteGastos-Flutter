@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sitegastos/pages/home_page.dart';
+import 'package:sitegastos/pages/main_page.dart';
 import 'package:sitegastos/store.dart';
 import 'package:sitegastos/themes/themes.dart';
 
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
             themeMode: value.themeMode,
             theme: lightTheme,
             darkTheme: darkTheme,
-            home: const HomePage(),
+            home: const MainPage(),
             debugShowCheckedModeBanner: false,
           );
         },
