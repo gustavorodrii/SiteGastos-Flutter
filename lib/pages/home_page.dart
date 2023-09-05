@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sitegastos/data/user_data.dart';
+
+import 'list_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,7 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _textController = TextEditingController();
   String _selectedMonth = 'Janeiro';
-  List<String> _items = [];
+  List<UserData> _items = [];
 
   void _showSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -24,11 +27,10 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: TextField(
                     controller: _textController,
-                    decoration: InputDecoration(labelText: 'Nome'),
+                    decoration: const InputDecoration(labelText: 'Nome'),
                   ),
                 ),
-                SizedBox(
-                    width: 16), // Espaçamento entre TextField e DropdownButton
+                const SizedBox(width: 16),
                 DropdownButton<String>(
                   value: _selectedMonth,
                   onChanged: (newValue) {
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -66,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   },
-                  child: Text(
+                  child: const Text(
                     'Cancelar',
                     style: TextStyle(
                       color: Colors.deepPurple,
@@ -77,14 +79,15 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      final newItem =
-                          '${_textController.text} ($_selectedMonth)';
+                      final newItem = UserData(
+                          mainItemName: _textController.text,
+                          monthName: _selectedMonth);
                       _items.add(newItem);
                       _textController.clear();
                     });
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   },
-                  child: Text(
+                  child: const Text(
                     'Adicionar item',
                     style: TextStyle(
                       color: Colors.deepPurple,
@@ -101,6 +104,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void deleteItem(int index) {
+    setState(() {
+      _items.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,37 +118,35 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Container(
-                  width: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: IconButton.filledTonal(
-                    onPressed: () {
-                      _showSnackBar(context);
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                ),
-              ),
-            ],
-          ),
           Expanded(
-            child: ListView.builder(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
               itemCount: _items.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_items[index]),
+                final customItem = _items[index];
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  child: ListTilePage(
+                    mainItemName: customItem.mainItemName,
+                    monthName: customItem.monthName,
+                    onDelete: () {
+                      deleteItem(index);
+                    },
+                  ),
                 );
               },
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _showSnackBar(context);
+        },
+        label: const Icon(Icons.add),
       ),
     );
   }
