@@ -5,7 +5,7 @@ class ListTilePage extends StatelessWidget {
   final String mainItemName;
   final String monthName;
   final VoidCallback onDelete;
-  ListTilePage({
+  const ListTilePage({
     super.key,
     required this.mainItemName,
     required this.monthName,
