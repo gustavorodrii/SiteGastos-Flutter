@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitegastos/data/user_data.dart';
+import 'package:sitegastos/pages/item_page.dart';
+import 'package:uuid/uuid.dart';
 
 import '../themes/themes.dart';
 import 'list_tile.dart';
@@ -52,6 +54,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   final TextEditingController _textController = TextEditingController();
+  final uuid = Uuid();
+  Map<String, String> itemIds = {};
+
   List<UserData> items = [];
   bool isItemDeleted = false;
   int deletedItemIndex = -1;
@@ -140,9 +145,12 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
+                      final listName = _textController.text;
                       final newItem = UserData(
-                          mainItemName: _textController.text,
-                          monthName: _selectedMonthNotifier.value);
+                        mainItemName: _textController.text,
+                        monthName: _selectedMonthNotifier.value,
+                        listName: listName,
+                      );
                       items.add(newItem);
                       _textController.clear();
                     });
@@ -194,10 +202,24 @@ class _HomePageState extends State<HomePage> {
               saveItems(items);
             },
           ),
-          duration: const Duration(seconds: 5),
+          duration: const Duration(seconds: 3),
         ),
       );
     });
+  }
+
+  void _navigateToItemPage(
+      BuildContext context, String itemName, String listName) {
+    final itemId = itemIds['$listName/$itemName'] ?? uuid.v4();
+    itemIds['$listName/$itemName'] = itemId;
+
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ItemPage(
+        itemId: itemId,
+        itemName: itemName,
+        listName: listName,
+      ),
+    ));
   }
 
   @override
@@ -216,15 +238,24 @@ class _HomePageState extends State<HomePage> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final customItem = items[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  child: ListTilePage(
-                    mainItemName: customItem.mainItemName,
-                    monthName: customItem.monthName,
-                    onDelete: () {
-                      deleteItem(index);
-                    },
+                return GestureDetector(
+                  onTap: () {
+                    _navigateToItemPage(
+                      context,
+                      customItem.mainItemName,
+                      customItem.listName,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 20),
+                    child: ListTilePage(
+                      mainItemName: customItem.mainItemName,
+                      monthName: customItem.monthName,
+                      onDelete: () {
+                        deleteItem(index);
+                      },
+                    ),
                   ),
                 );
               },
