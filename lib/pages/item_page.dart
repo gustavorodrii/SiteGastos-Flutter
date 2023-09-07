@@ -52,17 +52,15 @@ class _ItemPageState extends State<ItemPage> {
   }
 
   Future<void> saveItems(List<ExpenseData> items) async {
-    // items
     final prefs = await SharedPreferences.getInstance();
     final itemsJson = items.map((item) => item.toJson()).toList();
     final itemsJsonString = itemsJson.map((json) => jsonEncode(json)).toList();
-    await prefs.setStringList('${widget.listName}/items', itemsJsonString);
+    await prefs.setStringList('${widget.itemName}/items', itemsJsonString);
   }
 
   Future<void> loadItems() async {
-    // carregar items
     final prefs = await SharedPreferences.getInstance();
-    final itemsJsonString = prefs.getStringList('${widget.listName}/items');
+    final itemsJsonString = prefs.getStringList('${widget.itemName}/items');
 
     if (itemsJsonString != null) {
       final loadedItems = itemsJsonString
@@ -108,7 +106,7 @@ class _ItemPageState extends State<ItemPage> {
       appBar: AppBar(
         title: Text(
           widget.itemName,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         actions: [
           IconButton(
@@ -141,9 +139,7 @@ class _ItemPageState extends State<ItemPage> {
 
                             // Salvar o valor do salário usando SharedPreferences
                             final prefs = await SharedPreferences.getInstance();
-                            prefs.setDouble(
-                                '${widget.listName}/${widget.itemId}/salario',
-                                salario!);
+                            prefs.setDouble('salario', salario!);
                           }
                           Navigator.of(context).pop();
                         },
@@ -172,7 +168,7 @@ class _ItemPageState extends State<ItemPage> {
                     child: Column(
                       children: [
                         const Text(
-                          'Valor total Gasto',
+                          'Valor Gasto',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                           ),
@@ -183,6 +179,7 @@ class _ItemPageState extends State<ItemPage> {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Colors.red,
                           ),
                         ),
                       ],
@@ -271,22 +268,22 @@ class _ItemPageState extends State<ItemPage> {
                     elevation: 5,
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Valor Restante',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         FutureBuilder<double>(
                           // Calcula o valor restante
                           future: calculateRemainingValue(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator();
+                              return const CircularProgressIndicator();
                             } else if (snapshot.hasError) {
-                              return Text(
+                              return const Text(
                                 'Erro ao calcular',
                                 style: TextStyle(
                                   fontSize: 18,
@@ -302,9 +299,10 @@ class _ItemPageState extends State<ItemPage> {
                                 symbol: 'R\$',
                               ).format(remainingValue);
 
-                              final color = remainingValue < 0
-                                  ? Colors.red
-                                  : Colors.green;
+                              // Defina a cor com base no valor restante
+                              final color = remainingValue >= 0
+                                  ? Colors.green
+                                  : Colors.red;
 
                               return Text(
                                 formattedValue,
@@ -437,6 +435,8 @@ class _ItemPageState extends State<ItemPage> {
                   gastoController.clear();
                   valorController.clear();
                 });
+
+                // Chame saveItems após adicionar o novo item
                 saveItems(expenses);
               } else {
                 // Exibir um SnackBar informando que o campo é obrigatório.
