@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
               saveItems(items);
             },
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 2),
         ),
       );
     });
@@ -251,7 +251,9 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 20),
+                      vertical: 10,
+                      horizontal: 5,
+                    ),
                     child: ListTilePage(
                       mainItemName: customItem.mainItemName,
                       monthName: customItem.monthName,

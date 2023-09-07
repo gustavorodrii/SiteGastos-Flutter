@@ -87,6 +87,21 @@ class _ItemPageState extends State<ItemPage> {
     return currencyFormat.format(total);
   }
 
+  Future<double> calculateRemainingValue() async {
+    if (salario == null) {
+      return 0.0;
+    }
+
+    double totalGasto = 0.0;
+    for (var expense in expenses) {
+      if (expense.isChecked) {
+        totalGasto += expense.value;
+      }
+    }
+
+    return salario! - totalGasto;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,7 +154,7 @@ class _ItemPageState extends State<ItemPage> {
                 },
               );
             },
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit, color: Colors.white, size: 20),
           ),
         ],
       ),
@@ -244,8 +259,64 @@ class _ItemPageState extends State<ItemPage> {
                                     },
                                   );
                                 },
-                                child: Icon(Icons.add),
+                                child: const Icon(Icons.add),
                               ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Card(
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Valor Restante',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        FutureBuilder<double>(
+                          // Calcula o valor restante
+                          future: calculateRemainingValue(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                'Erro ao calcular',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                              );
+                            } else {
+                              final remainingValue = snapshot.data!;
+                              final formattedValue = NumberFormat.currency(
+                                locale: 'pt_BR',
+                                decimalDigits: 2,
+                                symbol: 'R\$',
+                              ).format(remainingValue);
+
+                              final color = remainingValue < 0
+                                  ? Colors.red
+                                  : Colors.green;
+
+                              return Text(
+                                formattedValue,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: color,
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -271,7 +342,7 @@ class _ItemPageState extends State<ItemPage> {
                   background: Container(
                     color: Colors.red,
                     alignment: Alignment.centerRight,
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Icon(Icons.delete, color: Colors.white),
                     ),
@@ -282,7 +353,6 @@ class _ItemPageState extends State<ItemPage> {
                       value: expense.isChecked,
                       onChanged: (bool? value) {
                         setState(() {
-                          isCheckBoxSelected = value ?? false;
                           expense.isChecked = value ?? false;
                           saveItems(expenses);
                         });
@@ -339,6 +409,7 @@ class _ItemPageState extends State<ItemPage> {
             child: TextField(
               controller: valorController,
               focusNode: _valorFocus,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Valor do Gasto',
                 prefixIcon: const Icon(Icons.attach_money_outlined),
@@ -353,9 +424,11 @@ class _ItemPageState extends State<ItemPage> {
           ElevatedButton(
             onPressed: () {
               final double value = double.tryParse(valorController.text) ?? 0.0;
-              if (value > 0) {
+              final String gastoText = gastoController.text.trim();
+
+              if (value > 0 && gastoText.isNotEmpty) {
                 final ExpenseData newExpense = ExpenseData(
-                  name: gastoController.text,
+                  name: gastoText,
                   value: value,
                   isChecked: false,
                 );
@@ -365,9 +438,23 @@ class _ItemPageState extends State<ItemPage> {
                   valorController.clear();
                 });
                 saveItems(expenses);
+              } else {
+                // Exibir um SnackBar informando que o campo é obrigatório.
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Center(
+                      child: Text(
+                          'Por favor, preencha todos os campos obrigatórios.'),
+                    ),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
               }
             },
-            child: const Text('Salvar'),
+            child: const Text(
+              'Salvar',
+              style: TextStyle(fontSize: 20),
+            ),
           ),
           const SizedBox(height: 20),
         ],
