@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitegastos/data/meta_data_page.dart';
 
 class CriarNovaMeta extends StatefulWidget {
@@ -64,16 +67,30 @@ class _CriarNovaMetaState extends State<CriarNovaMeta> {
           ),
           Center(
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 String nomeMeta = nomeMetaController.text;
                 int prazoMeta = int.parse(prazoMetaController.text);
                 double valorMeta = double.parse(valorMetaController.text);
+
+                int uniqueId = DateTime.now().millisecondsSinceEpoch;
+
+                MetaDataPage novaMeta = MetaDataPage(
+                  nomeMeta: nomeMeta,
+                  valueMeta: valorMeta,
+                  prazoMeta: prazoMeta,
+                  id: uniqueId,
+                );
+
+                // Salvar os dados no SharedPreferences
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                List<String> metaItemsJson =
+                    prefs.getStringList('metaItems') ?? [];
+                metaItemsJson.add(jsonEncode(novaMeta.toJson()));
+                prefs.setStringList('metaItems', metaItemsJson);
+
                 Navigator.pop(
                   context,
-                  MetaDataPage(
-                      nomeMeta: nomeMeta,
-                      valueMeta: valorMeta,
-                      prazoMeta: prazoMeta),
+                  novaMeta,
                 );
               },
               child: Text('Salvar'),

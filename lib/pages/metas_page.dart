@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitegastos/pages/criar_nova_meta.dart';
 import 'package:sitegastos/pages/detalhe_item_meta_page.dart';
 
@@ -6,7 +9,7 @@ import '../data/meta_data_page.dart';
 import 'list_tile_metas_page.dart';
 
 class MetasPage extends StatefulWidget {
-  MetasPage({super.key});
+  const MetasPage({super.key});
 
   @override
   State<MetasPage> createState() => _MetasPageState();
@@ -14,13 +17,32 @@ class MetasPage extends StatefulWidget {
 
 class _MetasPageState extends State<MetasPage> {
   List<MetaDataPage> metaItems = [];
-  double progresso = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarMetasSalvas();
+  }
+
+  Future<void> _carregarMetasSalvas() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? metaItemsJson = prefs.getStringList('metaItems');
+    if (metaItemsJson != null) {
+      List<MetaDataPage> loadedMetaItems = metaItemsJson
+          .map((json) => MetaDataPage.fromJson(jsonDecode(json)))
+          .toList();
+      setState(() {
+        metaItems = loadedMetaItems;
+      });
+    }
+  }
 
   void _navigateToDetalheItemMetaPage(MetaDataPage item) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DetalheItemMetaPage(item: item)));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DetalheItemMetaPage(item: item),
+      ),
+    );
   }
 
   @override
@@ -47,6 +69,7 @@ class _MetasPageState extends State<MetasPage> {
                     metasName: customItem.nomeMeta,
                     valueMeta: customItem.valueMeta,
                     prazoMeta: customItem.prazoMeta,
+                    id: customItem.id,
                   ),
                 );
               },
@@ -63,6 +86,12 @@ class _MetasPageState extends State<MetasPage> {
             setState(() {
               metaItems.add(result);
             });
+
+            // Salve os dados no SharedPreferences após adicionar um novo item
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            List<String> metaItemsJson =
+                metaItems.map((meta) => jsonEncode(meta.toJson())).toList();
+            prefs.setStringList('metaItems', metaItemsJson);
           }
         },
         label: const Text('Criar Meta'),
