@@ -42,7 +42,6 @@ class _ListTileMetasPageState extends State<ListTileMetasPage> {
                 child: Text(widget.metasName),
               ),
               const Spacer(),
-              Text(widget.id.toString()),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

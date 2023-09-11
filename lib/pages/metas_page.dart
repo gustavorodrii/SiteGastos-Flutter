@@ -40,9 +40,34 @@ class _MetasPageState extends State<MetasPage> {
   void _navigateToDetalheItemMetaPage(MetaDataPage item) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => DetalheItemMetaPage(item: item),
+        builder: (context) => DetalheItemMetaPage(
+          item: item,
+          onDelete: (meta) {
+            _excluirMeta(meta);
+          },
+        ),
       ),
     );
+  }
+
+  void _excluirMeta(MetaDataPage meta) {
+    setState(() {
+      metaItems.remove(meta);
+    });
+
+    // Salve os dados atualizados no SharedPreferences
+    _salvarMetasNoSharedPreferences();
+
+    // Você pode mostrar uma mensagem de sucesso aqui, se desejar
+    final snackBar = SnackBar(content: Text('Meta excluída com sucesso'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _salvarMetasNoSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> metaItemsJson =
+        metaItems.map((meta) => jsonEncode(meta.toJson())).toList();
+    prefs.setStringList('metaItems', metaItemsJson);
   }
 
   @override

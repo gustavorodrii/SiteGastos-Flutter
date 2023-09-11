@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,9 +7,11 @@ import 'package:sitegastos/data/meta_data_page.dart';
 
 class DetalheItemMetaPage extends StatefulWidget {
   final MetaDataPage item;
+  final Function(MetaDataPage) onDelete;
   const DetalheItemMetaPage({
     Key? key,
     required this.item,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -82,6 +85,41 @@ class _DetalheItemMetaPageState extends State<DetalheItemMetaPage> {
     }
   }
 
+  void _mostrarAlertDialogConfirmacao() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmação'),
+          content: Text('Deseja realmente excluir esta Meta?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o AlertDialog
+              },
+            ),
+            TextButton(
+              child: Text('Sim'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o AlertDialog
+                _excluirMeta(); // Executa a exclusão da Meta
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _excluirMeta() {
+    // Execute a função de callback para exclusão
+    widget.onDelete(widget.item);
+
+    // Navegue de volta para a página anterior
+    Navigator.of(context).pop();
+  }
+
   void _atualizarValorGuardado() {
     double novoValorGuardado = 0.0;
 
@@ -107,6 +145,21 @@ class _DetalheItemMetaPageState extends State<DetalheItemMetaPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.item.nomeMeta),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: IconButton(
+              onPressed: () {
+                _mostrarAlertDialogConfirmacao();
+              },
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.redAccent,
+                size: 25,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [

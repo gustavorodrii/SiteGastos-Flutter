@@ -28,41 +28,59 @@ class _CriarNovaMetaState extends State<CriarNovaMeta> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            maxLength: 25,
-            controller: nomeMetaController,
-            textInputAction: TextInputAction.next,
-            onSubmitted: (_) {
-              FocusScope.of(context).requestFocus(valorMeta);
-            },
-            decoration: const InputDecoration(
-              labelText: 'Nome',
-              hintText: 'Nome da Meta',
-              hintStyle: TextStyle(fontSize: 14),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+            child: TextField(
+              maxLength: 25,
+              controller: nomeMetaController,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) {
+                FocusScope.of(context).requestFocus(valorMeta);
+              },
+              decoration: InputDecoration(
+                labelText: 'Nome',
+                isDense: true,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
+                hintText: 'Nome da Meta',
+                hintStyle: TextStyle(fontSize: 12),
+              ),
             ),
           ),
-          TextField(
-            controller: valorMetaController,
-            focusNode: valorMeta,
-            textInputAction: TextInputAction.next,
-            onSubmitted: (_) {
-              FocusScope.of(context).requestFocus(prazoMeta);
-            },
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Valor',
-              hintText: 'Valor da Meta',
-              hintStyle: TextStyle(fontSize: 14),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextField(
+              controller: valorMetaController,
+              focusNode: valorMeta,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) {
+                FocusScope.of(context).requestFocus(prazoMeta);
+              },
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Valor',
+                isDense: true,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
+                hintText: 'Valor da Meta',
+                hintStyle: TextStyle(fontSize: 12),
+              ),
             ),
           ),
-          TextField(
-            controller: prazoMetaController,
-            focusNode: prazoMeta,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Prazo',
-              hintText: 'Quantidade de meses para alcançar a meta. Ex: 12',
-              hintStyle: TextStyle(fontSize: 14),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: TextField(
+              controller: prazoMetaController,
+              focusNode: prazoMeta,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                isDense: true,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
+                labelText: 'Prazo',
+                hintText: 'Quantidade de meses para alcançar a meta. Ex: 12',
+                hintStyle: TextStyle(fontSize: 12),
+              ),
             ),
           ),
           Center(
