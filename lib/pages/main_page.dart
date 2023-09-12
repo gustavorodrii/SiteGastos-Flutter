@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:sitegastos/pages/home_page.dart';
-import 'package:sitegastos/pages/metas_page.dart';
+import 'package:sitegastos/pages/gastos_page/home_page.dart';
+import 'package:sitegastos/pages/meta_page/metas_page.dart';
 import 'package:sitegastos/pages/perfil_page.dart';
 
 class MainPage extends StatefulWidget {

@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:sitegastos/pages/criar_nova_meta.dart';
-import 'package:sitegastos/pages/detalhe_item_meta_page.dart';
+import 'package:sitegastos/pages/meta_page/criar_nova_meta.dart';
+import 'package:sitegastos/pages/meta_page/detalhe_item_meta_page.dart';
 
-import '../data/meta_data_page.dart';
+import '../../data/meta_data_page.dart';
 import 'list_tile_metas_page.dart';
 
 class MetasPage extends StatefulWidget {
@@ -83,29 +83,47 @@ class _MetasPageState extends State<MetasPage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: metaItems.length,
-              itemBuilder: (context, index) {
-                final customItem = metaItems[index];
-                return GestureDetector(
-                  onTap: () {
-                    _navigateToDetalheItemMetaPage(customItem);
-                  },
-                  child: ListTileMetasPage(
-                    metasName: customItem.nomeMeta,
-                    valueMeta: customItem.valueMeta,
-                    prazoMeta: customItem.prazoMeta,
-                    id: customItem.id,
+      body: metaItems.isEmpty
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.auto_graph_outlined,
+                    size: 48,
+                    color: Colors.grey,
                   ),
-                );
-              },
+                  SizedBox(height: 16),
+                  Text(
+                    'Nenhuma meta criada ainda',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: metaItems.length,
+                    itemBuilder: (context, index) {
+                      final customItem = metaItems[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _navigateToDetalheItemMetaPage(customItem);
+                        },
+                        child: ListTileMetasPage(
+                          metasName: customItem.nomeMeta,
+                          valueMeta: customItem.valueMeta,
+                          prazoMeta: customItem.prazoMeta,
+                          id: customItem.id,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final result = await Navigator.push(context,

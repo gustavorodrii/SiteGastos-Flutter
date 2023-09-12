@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitegastos/data/user_data.dart';
-import 'package:sitegastos/pages/item_page.dart';
+import 'package:sitegastos/pages/gastos_page/item_page.dart';
 import 'package:uuid/uuid.dart';
 
-import '../themes/themes.dart';
+import '../../themes/themes.dart';
 import 'list_tile_home_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -146,10 +146,13 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     setState(() {
                       final listName = _textController.text;
+                      int uniqueId = DateTime.now().millisecondsSinceEpoch;
+
                       final newItem = UserData(
                         mainItemName: _textController.text,
                         monthName: _selectedMonthNotifier.value,
                         listName: listName,
+                        id: uniqueId,
                       );
                       items.add(newItem);
                       _textController.clear();
@@ -209,9 +212,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToItemPage(
-      BuildContext context, String itemName, String listName) {
-    final itemId = itemIds['$listName/$itemName'] ?? uuid.v4();
-    itemIds['$listName/$itemName'] = itemId;
+    BuildContext context,
+    String itemName,
+    String listName,
+    int uniqueId,
+  ) {
+    final itemId = uniqueId.toString(); // Converta para String
 
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ItemPage(
@@ -231,43 +237,60 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final customItem = items[index];
-                return GestureDetector(
-                  onTap: () {
-                    _navigateToItemPage(
-                      context,
-                      customItem.mainItemName,
-                      customItem.listName,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 5,
-                    ),
-                    child: ListTilePage(
-                      mainItemName: customItem.mainItemName,
-                      monthName: customItem.monthName,
-                      onDelete: () {
-                        deleteItem(index);
-                      },
-                    ),
+      body: items.isEmpty
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.attach_money_outlined,
+                      size: 48, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'Crie uma nova lista de gastos',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
-                );
-              },
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final customItem = items[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _navigateToItemPage(
+                            context,
+                            customItem.mainItemName,
+                            customItem.listName,
+                            customItem.id,
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 5,
+                          ),
+                          child: ListTilePage(
+                            mainItemName: customItem.mainItemName,
+                            monthName: customItem.monthName,
+                            onDelete: () {
+                              deleteItem(index);
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           _showSnackBar(context);

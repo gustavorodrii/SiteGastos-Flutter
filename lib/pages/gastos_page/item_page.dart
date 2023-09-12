@@ -41,9 +41,9 @@ class _ItemPageState extends State<ItemPage> {
   }
 
   Future<void> loadSalario() async {
-    // salario
     final prefs = await SharedPreferences.getInstance();
-    final salarioSalvo = prefs.getDouble('salario');
+    final salarioSalvo =
+        prefs.getDouble('${widget.listName}/${widget.itemId}/salario');
     if (salarioSalvo != null) {
       setState(() {
         salario = salarioSalvo;
@@ -55,12 +55,20 @@ class _ItemPageState extends State<ItemPage> {
     final prefs = await SharedPreferences.getInstance();
     final itemsJson = items.map((item) => item.toJson()).toList();
     final itemsJsonString = itemsJson.map((json) => jsonEncode(json)).toList();
-    await prefs.setStringList('${widget.itemName}/items', itemsJsonString);
+
+    // Usar uma chave única com base no listName e itemId
+    final uniqueKey = '${widget.listName}/${widget.itemId}/items';
+
+    await prefs.setStringList(uniqueKey, itemsJsonString);
   }
 
   Future<void> loadItems() async {
     final prefs = await SharedPreferences.getInstance();
-    final itemsJsonString = prefs.getStringList('${widget.itemName}/items');
+
+    // Usar a mesma chave única para carregar os itens
+    final uniqueKey = '${widget.listName}/${widget.itemId}/items';
+
+    final itemsJsonString = prefs.getStringList(uniqueKey);
 
     if (itemsJsonString != null) {
       final loadedItems = itemsJsonString
@@ -122,12 +130,6 @@ class _ItemPageState extends State<ItemPage> {
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('Cancelar'),
-                      ),
-                      TextButton(
                         onPressed: () async {
                           // Validar e atualizar o valor do salário
                           final valorSalario =
@@ -137,9 +139,11 @@ class _ItemPageState extends State<ItemPage> {
                               salario = valorSalario;
                             });
 
-                            // Salvar o valor do salário usando SharedPreferences
+                            // Salvar o valor do salário usando SharedPreferences com base no itemId
                             final prefs = await SharedPreferences.getInstance();
-                            prefs.setDouble('salario', salario!);
+                            prefs.setDouble(
+                                '${widget.listName}/${widget.itemId}/salario',
+                                salario!);
                           }
                           Navigator.of(context).pop();
                         },
@@ -177,7 +181,7 @@ class _ItemPageState extends State<ItemPage> {
                         Text(
                           calculateTotalExpense(),
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
@@ -206,7 +210,7 @@ class _ItemPageState extends State<ItemPage> {
                                   symbol: 'R\$',
                                 ).format(salario!),
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -241,11 +245,13 @@ class _ItemPageState extends State<ItemPage> {
                                                 });
 
                                                 // Salvar o valor do salário usando SharedPreferences
+
                                                 final prefs =
                                                     await SharedPreferences
                                                         .getInstance();
                                                 prefs.setDouble(
-                                                    'salario', salario!);
+                                                    '${widget.listName}/${widget.itemId}/salario',
+                                                    salario!);
                                               }
                                               Navigator.of(context).pop();
                                             },
@@ -286,7 +292,7 @@ class _ItemPageState extends State<ItemPage> {
                               return const Text(
                                 'Erro ao calcular',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red,
                                 ),
@@ -307,7 +313,7 @@ class _ItemPageState extends State<ItemPage> {
                               return Text(
                                 formattedValue,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: color,
                                 ),
@@ -340,7 +346,7 @@ class _ItemPageState extends State<ItemPage> {
                   background: Container(
                     color: Colors.red,
                     alignment: Alignment.centerRight,
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Icon(Icons.delete, color: Colors.white),
                     ),
@@ -437,7 +443,7 @@ class _ItemPageState extends State<ItemPage> {
                 });
 
                 // Chame saveItems após adicionar o novo item
-                saveItems(expenses);
+                saveItems(expenses); // Adicione esta linha para salvar os dados
               } else {
                 // Exibir um SnackBar informando que o campo é obrigatório.
                 ScaffoldMessenger.of(context).showSnackBar(

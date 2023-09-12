@@ -3,11 +3,13 @@ class UserData {
   String mainItemName;
   String monthName;
   final String listName;
+  int id;
 
   UserData({
     required this.mainItemName,
     required this.monthName,
     required this.listName,
+    required this.id,
   });
 
   // Método para criar um objeto UserData a partir de um mapa (JSON)
@@ -16,6 +18,7 @@ class UserData {
       mainItemName: json['mainItemName'],
       monthName: json['monthName'],
       listName: '',
+      id: json['id'],
     );
   }
 
@@ -25,6 +28,7 @@ class UserData {
       'mainItemName': mainItemName,
       'monthName': monthName,
       'listName': listName,
+      'id': id,
     };
   }
 }
