@@ -89,9 +89,7 @@ class _CriarNovaMetaState extends State<CriarNovaMeta> {
                 String nomeMeta = nomeMetaController.text;
                 int prazoMeta = int.parse(prazoMetaController.text);
                 double valorMeta = double.parse(valorMetaController.text);
-
                 int uniqueId = DateTime.now().millisecondsSinceEpoch;
-
                 MetaDataPage novaMeta = MetaDataPage(
                   nomeMeta: nomeMeta,
                   valueMeta: valorMeta,

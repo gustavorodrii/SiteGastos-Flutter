@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:sitegastos/themes/themes.dart';
 
@@ -54,15 +53,6 @@ class _ListTileMetasPageState extends State<ListTileMetasPage> {
                 ),
               ),
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            child: LinearPercentIndicator(
-              lineHeight: 10,
-              percent: 0.2,
-              progressColor: Colors.green,
-              animation: true,
-            ),
           ),
         ],
       ),

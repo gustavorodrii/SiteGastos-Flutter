@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sitegastos/pages/criar_nova_meta.dart';
 import 'package:sitegastos/pages/detalhe_item_meta_page.dart';
 
@@ -9,7 +11,9 @@ import '../data/meta_data_page.dart';
 import 'list_tile_metas_page.dart';
 
 class MetasPage extends StatefulWidget {
-  const MetasPage({super.key});
+  const MetasPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MetasPage> createState() => _MetasPageState();

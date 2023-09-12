@@ -23,12 +23,11 @@ class _DetalheItemMetaPageState extends State<DetalheItemMetaPage> {
   List<bool> isChecked = [];
   double valorGuardado = 0.0;
   int totalCheckboxes = 0;
-
   @override
   void initState() {
     super.initState();
     calcularValores();
-    _carregarDados(); // Carrega os dados ao iniciar a página
+    _carregarDados();
   }
 
   void calcularValores() {
@@ -132,7 +131,6 @@ class _DetalheItemMetaPageState extends State<DetalheItemMetaPage> {
     setState(() {
       valorGuardado = novoValorGuardado;
     });
-
     _salvarDados();
   }
 
@@ -147,7 +145,7 @@ class _DetalheItemMetaPageState extends State<DetalheItemMetaPage> {
         title: Text(widget.item.nomeMeta),
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: IconButton(
               onPressed: () {
                 _mostrarAlertDialogConfirmacao();
@@ -190,7 +188,7 @@ class _DetalheItemMetaPageState extends State<DetalheItemMetaPage> {
                 ),
                 const SizedBox(width: 20),
                 if (todosSelecionados)
-                  const Icon(Icons.done, color: Colors.green, size: 30)
+                  const Icon(Icons.done, color: Colors.green, size: 50)
                 else
                   Text('$checkboxesSelecionados / ${valores.length}'),
                 const SizedBox(width: 20),
