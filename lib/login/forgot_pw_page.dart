@@ -110,7 +110,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           MaterialButton(
             onPressed: passwordReset,
             child: Text('Resetar senha'),
-            color: Colors.purple.shade300,
+            color: Colors.purple.shade100,
           ),
         ],
       ),

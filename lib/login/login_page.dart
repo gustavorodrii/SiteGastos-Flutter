@@ -97,7 +97,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               const SizedBox(height: 70),
-              const Icon(Icons.auto_graph_outlined, size: 200),
+
+              Image.asset(
+                "assets/piggy_image.png",
+                height: 150,
+                width: 150,
+              ),
+              // const Icon(Icons.auto_graph_outlined, size: 200),
               const SizedBox(height: 20),
               const Text(
                 'Planeje, Economize e Realize!',
@@ -138,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                 text: 'Entrar',
                 onPressed: signIn,
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
