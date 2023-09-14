@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:566643753143:android:58ba2d3dd4b7c9290f4d32",
+        "android_client_info": {
+          "package_name": "com.bolsoamigo.gastos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuRbcA9awK6i045rR0jH_zMQqYvQaoICk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:566643753143:android:277625f1868c83070f4d32",
         "android_client_info": {
-          "package_name": "com.example.sitegastos"
+          "package_name": "com.bolsoamigo.gastos"
         }
       },
       "oauth_client": [],

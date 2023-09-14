@@ -25,15 +25,25 @@ class _RegisterPageState extends State<RegisterPage> {
   void signUp() async {
     try {
       if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: usernameController.text,
           password: passwordController.text,
         );
       } else {
-        showErrorMessage('Senhas nao coincidem!');
+        showErrorMessage('As senhas não coincidem!');
       }
     } on FirebaseAuthException catch (e) {
-      showErrorMessage(e.code);
+      String errorMessage = 'Ocorreu um erro ao criar a conta.';
+
+      if (e.code == 'email-already-in-use') {
+        errorMessage = 'O e-mail fornecido já está em uso por outra conta.';
+      } else if (e.code == 'invalid-email') {
+        errorMessage = 'E-mail inválido. Verifique o formato do e-mail.';
+      } else if (e.code == 'weak-password') {
+        errorMessage = 'A senha fornecida é fraca. Tente uma senha mais forte.';
+      }
+
+      showErrorMessage(errorMessage);
     }
   }
 
@@ -43,7 +53,10 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (context) {
         return AlertDialog(
           title: Center(
-            child: Text(message),
+            child: Text(
+              message,
+              style: TextStyle(fontSize: 18),
+            ),
           ),
           actions: [
             TextButton(

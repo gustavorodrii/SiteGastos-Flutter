@@ -66,7 +66,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '566643753143',
     projectId: 'gastosapp-bcedf',
     storageBucket: 'gastosapp-bcedf.appspot.com',
-    iosBundleId: 'com.example.sitegastos',
+    iosBundleId: 'com.bolsoamigo.gastos',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -75,6 +75,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '566643753143',
     projectId: 'gastosapp-bcedf',
     storageBucket: 'gastosapp-bcedf.appspot.com',
-    iosBundleId: 'com.example.sitegastos.RunnerTests',
+    iosBundleId: 'com.bolsoamigo.gastos.RunnerTests',
   );
 }

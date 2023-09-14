@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sitegastos/login/forgot_pw_page.dart';
 
 import 'package:sitegastos/login/my_button.dart';
 import 'package:sitegastos/login/my_text_field.dart';
@@ -23,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: usernameController.text,
         password: passwordController.text,
       );
@@ -114,17 +115,25 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Senha',
                 obscureText: true,
               ),
-              const SizedBox(height: 15),
-              const Padding(
+              const SizedBox(height: 3),
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('Esqueceu sua senha ?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotPasswordPage()));
+                      },
+                      child: Text('Esqueceu sua senha ?'),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               MyButton(
                 text: 'Entrar',
                 onPressed: signIn,
