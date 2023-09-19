@@ -70,61 +70,62 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: lightTheme.indicatorColor,
         behavior: SnackBarBehavior.floating,
         content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: TextField(
-                    maxLength: 10,
-                    style: const TextStyle(color: Colors.black),
-                    controller: _textController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nome da Lista',
-                      labelStyle: TextStyle(
-                        color: Colors.deepPurple,
-                        fontSize: 14,
-                      ),
-                    ),
+            TextField(
+              maxLength: 15,
+              style: const TextStyle(color: Colors.black),
+              controller: _textController,
+              decoration: const InputDecoration(
+                labelText: 'Nome da Lista',
+                labelStyle: TextStyle(
+                  color: Colors.deepPurple,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Text(
+              'Selecione o Mês',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            ValueListenableBuilder<String>(
+              valueListenable: _selectedMonthNotifier,
+              builder: (context, selectedMonth, child) {
+                return DropdownButton<String>(
+                  value: selectedMonth,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                const SizedBox(width: 16),
-                ValueListenableBuilder<String>(
-                  valueListenable: _selectedMonthNotifier,
-                  builder: (context, selectedMonth, child) {
-                    return DropdownButton<String>(
-                      value: selectedMonth,
-                      style: const TextStyle(
-                        color: Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onChanged: (newValue) {
-                        _selectedMonthNotifier.value = newValue!;
-                      },
-                      items: [
-                        'Janeiro',
-                        'Fevereiro',
-                        'Março',
-                        'Abril',
-                        'Maio',
-                        'Junho',
-                        'Julho',
-                        'Agosto',
-                        'Setembro',
-                        'Outubro',
-                        'Novembro',
-                        'Dezembro',
-                      ].map((month) {
-                        return DropdownMenuItem<String>(
-                          value: month,
-                          child: Text(month),
-                        );
-                      }).toList(),
-                    );
+                  onChanged: (newValue) {
+                    _selectedMonthNotifier.value = newValue!;
                   },
-                ),
-              ],
+                  items: [
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                    'Julho',
+                    'Agosto',
+                    'Setembro',
+                    'Outubro',
+                    'Novembro',
+                    'Dezembro',
+                  ].map((month) {
+                    return DropdownMenuItem<String>(
+                      value: month,
+                      child: Text(month),
+                    );
+                  }).toList(),
+                );
+              },
             ),
             const SizedBox(height: 30),
             Row(
@@ -223,7 +224,6 @@ class _HomePageState extends State<HomePage> {
       builder: (context) => ItemPage(
         itemId: itemId,
         itemName: itemName,
-        listName: listName,
       ),
     ));
   }
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                       size: 48, color: Colors.grey),
                   SizedBox(height: 16),
                   Text(
-                    'Crie uma nova lista de gastos',
+                    'Crie uma nova lista para\nadicionar o seus gastos',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 ],

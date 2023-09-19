@@ -25,36 +25,38 @@ class _ListTileMetasPageState extends State<ListTileMetasPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(color: darkTheme.primaryColor),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Row(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(widget.metasName),
-                ),
-                const Spacer(),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                    NumberFormat.currency(
-                      locale: 'pt_BR',
-                      decimalDigits: 2,
-                      symbol: 'R\$',
-                    ).format(widget.valueMeta),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                children: [
+                  Icon(Icons.auto_graph_outlined),
+                  SizedBox(width: 10),
+                  Text(
+                    widget.metasName,
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                NumberFormat.currency(
+                  locale: 'pt_BR',
+                  decimalDigits: 2,
+                  symbol: 'R\$',
+                ).format(widget.valueMeta),
+              ),
             ),
           ],
         ),

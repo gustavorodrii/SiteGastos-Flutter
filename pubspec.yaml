@@ -44,6 +44,9 @@ dependencies:
   firebase_auth: ^4.9.0
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.2
+  carousel_slider: ^4.2.1
+  google_fonts: ^6.0.0
+  dots_indicator: ^3.0.0
 flutter_icons:
   android: true
   ios: true

@@ -10,12 +10,10 @@ import 'package:sitegastos/data/expense_data.dart';
 class ItemPage extends StatefulWidget {
   final String itemName;
   final String itemId;
-  final String listName;
   const ItemPage({
     Key? key,
     required this.itemName,
     required this.itemId,
-    required this.listName,
   }) : super(key: key);
 
   @override
@@ -42,8 +40,7 @@ class _ItemPageState extends State<ItemPage> {
 
   Future<void> loadSalario() async {
     final prefs = await SharedPreferences.getInstance();
-    final salarioSalvo =
-        prefs.getDouble('${widget.listName}/${widget.itemId}/salario');
+    final salarioSalvo = prefs.getDouble('${widget.itemId}/salario');
     if (salarioSalvo != null) {
       setState(() {
         salario = salarioSalvo;
@@ -57,7 +54,7 @@ class _ItemPageState extends State<ItemPage> {
     final itemsJsonString = itemsJson.map((json) => jsonEncode(json)).toList();
 
     // Usar uma chave única com base no listName e itemId
-    final uniqueKey = '${widget.listName}/${widget.itemId}/items';
+    final uniqueKey = '${widget.itemId}/items';
 
     await prefs.setStringList(uniqueKey, itemsJsonString);
   }
@@ -66,7 +63,7 @@ class _ItemPageState extends State<ItemPage> {
     final prefs = await SharedPreferences.getInstance();
 
     // Usar a mesma chave única para carregar os itens
-    final uniqueKey = '${widget.listName}/${widget.itemId}/items';
+    final uniqueKey = '${widget.itemId}/items';
 
     final itemsJsonString = prefs.getStringList(uniqueKey);
 
@@ -111,6 +108,7 @@ class _ItemPageState extends State<ItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           widget.itemName,
@@ -142,8 +140,7 @@ class _ItemPageState extends State<ItemPage> {
                             // Salvar o valor do salário usando SharedPreferences com base no itemId
                             final prefs = await SharedPreferences.getInstance();
                             prefs.setDouble(
-                                '${widget.listName}/${widget.itemId}/salario',
-                                salario!);
+                                '${widget.itemId}/salario', salario!);
                           }
                           Navigator.of(context).pop();
                         },
@@ -161,7 +158,7 @@ class _ItemPageState extends State<ItemPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -250,7 +247,7 @@ class _ItemPageState extends State<ItemPage> {
                                                     await SharedPreferences
                                                         .getInstance();
                                                 prefs.setDouble(
-                                                    '${widget.listName}/${widget.itemId}/salario',
+                                                    '${widget.itemId}/salario',
                                                     salario!);
                                               }
                                               Navigator.of(context).pop();
@@ -329,7 +326,6 @@ class _ItemPageState extends State<ItemPage> {
               ],
             ),
           ),
-          const SizedBox(height: 25),
           Expanded(
             child: ListView.builder(
               itemCount: expenses.length,
@@ -390,7 +386,7 @@ class _ItemPageState extends State<ItemPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: TextField(
               controller: gastoController,
               textInputAction: TextInputAction.next,
@@ -400,6 +396,7 @@ class _ItemPageState extends State<ItemPage> {
               maxLength: 30,
               decoration: InputDecoration(
                 labelText: 'Nome do Gasto',
+                labelStyle: TextStyle(fontSize: 20),
                 prefixIcon: const Icon(Icons.text_snippet_outlined),
                 isDense: true,
                 border: OutlineInputBorder(
@@ -409,13 +406,14 @@ class _ItemPageState extends State<ItemPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: TextField(
               controller: valorController,
               focusNode: _valorFocus,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Valor do Gasto',
+                labelStyle: TextStyle(fontSize: 20),
                 prefixIcon: const Icon(Icons.attach_money_outlined),
                 isDense: true,
                 border: OutlineInputBorder(
@@ -440,12 +438,9 @@ class _ItemPageState extends State<ItemPage> {
                   expenses.add(newExpense);
                   gastoController.clear();
                   valorController.clear();
+                  saveItems(expenses);
                 });
-
-                // Chame saveItems após adicionar o novo item
-                saveItems(expenses); // Adicione esta linha para salvar os dados
               } else {
-                // Exibir um SnackBar informando que o campo é obrigatório.
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Center(

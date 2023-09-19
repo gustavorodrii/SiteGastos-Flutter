@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,11 +7,11 @@ import '../store.dart';
 class PerfilPage extends StatelessWidget {
   PerfilPage({super.key});
 
-  final user = FirebaseAuth.instance.currentUser!;
+  // final user = FirebaseAuth.instance.currentUser!;
 
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
+  // void signOut() {
+  //   FirebaseAuth.instance.signOut();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -25,40 +25,54 @@ class PerfilPage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Column(
-              children: <Widget>[
-                RadioListTile<ThemeMode>(
-                  title: const Text('System'),
-                  value: ThemeMode.system,
-                  groupValue: appStore.themeMode,
-                  onChanged: (ThemeMode? value) {
-                    appStore.switchTheme(value);
-                  },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                RadioListTile(
-                  title: const Text('Light'),
-                  value: ThemeMode.light,
-                  groupValue: appStore.themeMode,
-                  onChanged: appStore.switchTheme,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Tema do Aplicativo',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: 20),
+                    RadioListTile<ThemeMode>(
+                      title: const Text('Automático'),
+                      value: ThemeMode.system,
+                      groupValue: appStore.themeMode,
+                      onChanged: (ThemeMode? value) {
+                        appStore.switchTheme(value);
+                      },
+                    ),
+                    RadioListTile(
+                      title: const Text('Claro'),
+                      value: ThemeMode.light,
+                      groupValue: appStore.themeMode,
+                      onChanged: appStore.switchTheme,
+                    ),
+                    RadioListTile(
+                      title: const Text('Escuro'),
+                      value: ThemeMode.dark,
+                      groupValue: appStore.themeMode,
+                      onChanged: appStore.switchTheme,
+                    ),
+                  ],
                 ),
-                RadioListTile(
-                  title: const Text('Dark'),
-                  value: ThemeMode.dark,
-                  groupValue: appStore.themeMode,
-                  onChanged: appStore.switchTheme,
-                ),
-              ],
-            ),
-            Spacer(),
-            ElevatedButton.icon(
-              onPressed: signOut,
-              icon: Icon(Icons.logout),
-              label: Text('Sair da conta'),
-            ),
-            SizedBox(height: 30),
-          ],
+              ),
+              // Spacer(),
+              // ElevatedButton.icon(
+              //   onPressed: signOut,
+              //   icon: Icon(Icons.logout),
+              //   label: Text('Sair da conta'),
+              // ),
+              // SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );

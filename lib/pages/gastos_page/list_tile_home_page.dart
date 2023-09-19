@@ -17,50 +17,59 @@ class ListTilePage extends StatelessWidget {
     return Card(
       elevation: 10,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
         side: BorderSide(color: darkTheme.primaryColor),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
               children: [
-                const Icon(Icons.text_snippet_outlined, size: 25),
-                const SizedBox(width: 10),
-                Text(mainItemName),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const Icon(Icons.date_range, size: 25),
-                const SizedBox(width: 10),
-                Text(monthName),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color(0xFFB3261E),
+                Row(
+                  children: [
+                    Text(
+                      "Nome da Lista :",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(mainItemName),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Text(
+                      "Mês :",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(monthName),
+                  ],
+                ),
+                SizedBox(height: 10),
+                IconButton(
                   onPressed: onDelete,
-                  child: const Text(
-                    'Deletar',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  icon: Icon(Icons.disabled_by_default_rounded),
+                  iconSize: 40,
+                  color: Colors.redAccent,
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
