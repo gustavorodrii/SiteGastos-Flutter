@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:sitegastos/pages/gastos_page/home_page.dart';
-import 'package:sitegastos/pages/meta_page/metas_page.dart';
+import 'package:sitegastos/pages/gastos/home_page.dart';
+import 'package:sitegastos/pages/meta/metas_page.dart';
 import 'package:sitegastos/pages/perfil_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -45,7 +45,7 @@ class _MainPageState extends State<MainPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: paginaAtual,
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.attach_money),
             label: 'Gastos',

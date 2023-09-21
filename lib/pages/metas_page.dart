@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:sitegastos/pages/meta_page/criar_nova_meta.dart';
-import 'package:sitegastos/pages/meta_page/detalhe_item_meta_page.dart';
+import 'package:sitegastos/pages/meta/criar_nova_meta.dart';
+import 'package:sitegastos/pages/meta/detalhe_item_meta_page.dart';
 
-import '../../data/meta_data_page.dart';
-import 'list_tile_metas_page.dart';
+import '../data/meta_data_page.dart';
+import 'meta/list_tile_metas_page.dart';
 
 class MetasPage extends StatefulWidget {
   const MetasPage({

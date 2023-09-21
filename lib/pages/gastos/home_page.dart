@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitegastos/data/user_data.dart';
-import 'package:sitegastos/pages/gastos_page/item_page.dart';
+import 'package:sitegastos/pages/gastos/item_page.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../themes/themes.dart';
@@ -54,9 +54,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   final TextEditingController _textController = TextEditingController();
+  final _controllerSearch = TextEditingController();
+  bool isSearchVisible = false;
   final uuid = Uuid();
   Map<String, String> itemIds = {};
-
   List<UserData> items = [];
   bool isItemDeleted = false;
   int deletedItemIndex = -1;
@@ -228,6 +229,20 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
+  List<UserData> getFilteredItems() {
+    final searchQuery = _controllerSearch.text.toLowerCase();
+    return items.where((list) {
+      final itemName = list.listName.toLowerCase();
+      return itemName.contains(searchQuery);
+    }).toList();
+  }
+
+  void updateSearchQuery(String query) {
+    setState(() {
+      _controllerSearch.text = query;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,6 +251,25 @@ class _HomePageState extends State<HomePage> {
           'Home',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isSearchVisible = !isSearchVisible;
+                if (!isSearchVisible) {
+                  _controllerSearch.clear();
+                }
+              });
+            },
+            icon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(
+                isSearchVisible ? Icons.close : Icons.search,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: items.isEmpty
           ? const Center(
@@ -254,15 +288,32 @@ class _HomePageState extends State<HomePage> {
             )
           : Column(
               children: [
+                if (isSearchVisible)
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: TextField(
+                      controller: _controllerSearch,
+                      decoration: InputDecoration(
+                        hintText: 'Pesquisar por nome...',
+                      ),
+                      onChanged: (query) {
+                        setState(() {});
+                      },
+                    ),
+                  ),
                 Expanded(
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    itemCount: items.length,
+                    itemCount: isSearchVisible
+                        ? getFilteredItems().length
+                        : items.length,
                     itemBuilder: (context, index) {
-                      final customItem = items[index];
+                      final customItem = isSearchVisible
+                          ? getFilteredItems()[index]
+                          : items[index];
                       return GestureDetector(
                         onTap: () {
                           _navigateToItemPage(
