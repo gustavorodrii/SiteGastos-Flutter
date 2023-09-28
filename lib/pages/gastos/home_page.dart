@@ -280,7 +280,7 @@ class _HomePageState extends State<HomePage> {
                       size: 48, color: Colors.grey),
                   SizedBox(height: 16),
                   Text(
-                    'Crie uma nova lista para\nadicionar o seus gastos',
+                    'Crie uma nova lista para\nadicionar os seus gastos',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 ],
@@ -302,11 +302,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
+                  child: ListView.builder(
                     itemCount: isSearchVisible
                         ? getFilteredItems().length
                         : items.length,

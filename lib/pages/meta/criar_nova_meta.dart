@@ -31,7 +31,7 @@ class _CriarNovaMetaState extends State<CriarNovaMeta> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
             child: TextField(
-              maxLength: 25,
+              maxLength: 15,
               controller: nomeMetaController,
               textInputAction: TextInputAction.next,
               onSubmitted: (_) {

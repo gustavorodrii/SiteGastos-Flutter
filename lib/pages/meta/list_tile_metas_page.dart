@@ -25,6 +25,10 @@ class _ListTileMetasPageState extends State<ListTileMetasPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Card(
+        shape: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.deepPurpleAccent, width: 0.5),
+          borderRadius: BorderRadius.circular(12),
+        ),
         elevation: 20,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),

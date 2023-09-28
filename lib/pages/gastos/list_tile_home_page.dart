@@ -1,73 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:sitegastos/themes/themes.dart';
 
 class ListTilePage extends StatelessWidget {
   final String mainItemName;
   final String monthName;
   final VoidCallback onDelete;
+
   const ListTilePage({
-    super.key,
+    Key? key,
     required this.mainItemName,
     required this.monthName,
     required this.onDelete,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-        ),
-        side: BorderSide(color: darkTheme.primaryColor),
-      ),
-      child: ListView(
-        shrinkWrap: true,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
-              children: [
-                Row(
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.purple.shade100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.deepPurpleAccent,
+                  width: 0.5,
+                ),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nome da Lista :",
+                      "Nome da lista de gastos :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(mainItemName),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
+                    Text(mainItemName),
+                    SizedBox(height: 10),
                     Text(
                       "Mês :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
                     Text(monthName),
                   ],
                 ),
-                SizedBox(height: 10),
-                IconButton(
-                  onPressed: onDelete,
-                  icon: Icon(Icons.disabled_by_default_rounded),
-                  iconSize: 40,
-                  color: Colors.redAccent,
-                ),
-              ],
+              ),
             ),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.disabled_by_default_rounded,
+              color: Colors.red,
+            ),
+            onPressed: onDelete,
           ),
         ],
       ),
