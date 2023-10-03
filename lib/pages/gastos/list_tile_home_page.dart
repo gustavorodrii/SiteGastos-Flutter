@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sitegastos/themes/themes.dart';
 
 class ListTilePage extends StatelessWidget {
   final String mainItemName;
@@ -21,7 +22,7 @@ class ListTilePage extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.purple.shade100,
+                color: Colors.deepPurple.shade200,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: Colors.deepPurpleAccent,

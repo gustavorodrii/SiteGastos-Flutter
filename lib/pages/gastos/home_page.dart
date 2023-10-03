@@ -321,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 10,
+                            vertical: 5,
                             horizontal: 5,
                           ),
                           child: ListTilePage(
