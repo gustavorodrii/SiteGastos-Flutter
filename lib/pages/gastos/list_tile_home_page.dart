@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sitegastos/themes/themes.dart';
 
 class ListTilePage extends StatelessWidget {
   final String mainItemName;
